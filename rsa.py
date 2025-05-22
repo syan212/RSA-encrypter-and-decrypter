@@ -1,20 +1,24 @@
 import random
 import math
-def isPrime(n, k=5): # miller-rabin
-    if n < 2: return False
-    for p in [2,3,5,7,11,13,17,19,23,29]:
-        if n % p == 0: return n == p
-    s, d = 0, n-1
-    while d % 2 == 0:
-        s, d = s+1, d/2
-    for i in range(k):
-        x = pow(random.randint(2, n-1), d, n)
-        if x == 1 or x == n-1: continue
-        for r in range(1, s):
-            x = (x * x) % n
-            if x == 1: return False
-            if x == n-1: break
-        else: return False
+def isPrime(n, k = 40):
+    if n < 2 or (n != 2 and not n & 1):
+        return False
+    if n < 6:
+        return True
+    random_gen = random.SystemRandom()
+    for _ in range(k):
+        a = random_gen.randrange(2, n - 1)
+        exp = n - 1
+        while not exp & 1:
+            exp >>= 1
+        if pow(a, exp, n) == 1:
+            continue
+        while exp < n - 1:
+            if pow(a, exp, n) == n - 1:
+                break
+            exp <<= 1
+        else:
+            return False
     return True
 def generate_prime(bits):
     while True:
