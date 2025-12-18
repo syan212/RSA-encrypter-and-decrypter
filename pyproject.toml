@@ -12,3 +12,9 @@ dependencies = [
 dev = [
     "ruff>=0.14.10",
 ]
+
+# Formatter
+[tool.ruff.format]
+line-ending = "lf"
+quote-style = "single"
+indent-style = "space"

@@ -27,47 +27,47 @@ def generate_keys() -> tuple[tuple[int, int], tuple[int, int]]:
     return (n, e), (n, d)
 
 
-key_true = input("Generate keys? (y/n):").lower()
-if key_true != "y" and key_true != "n":
-    print("Invalid input. Enter y/n.")
+key_true = input('Generate keys? (y/n):').lower()
+if key_true != 'y' and key_true != 'n':
+    print('Invalid input. Enter y/n.')
     exit(1)
 
-encrypt_true = input("Encrypt or decrypt? (e/d):").lower()
-if encrypt_true != "e" and encrypt_true != "d":
-    print("Invalid input. Enter e/d.")
+encrypt_true = input('Encrypt or decrypt? (e/d):').lower()
+if encrypt_true != 'e' and encrypt_true != 'd':
+    print('Invalid input. Enter e/d.')
     exit(1)
 
-if key_true == "y" and encrypt_true == "d":
-    print("Invalid input. Not allowed.")
+if key_true == 'y' and encrypt_true == 'd':
+    print('Invalid input. Not allowed.')
     exit(1)
 
 message = input(
-    "Enter the ciphertext: " if encrypt_true == "d" else "Enter a message: "
+    'Enter the ciphertext: ' if encrypt_true == 'd' else 'Enter a message: '
 )
 
-if key_true == "y":
+if key_true == 'y':
     public, private = generate_keys()
     n, e = public[0], public[1]
-    message = int.from_bytes(message.encode(), "big")
+    message = int.from_bytes(message.encode(), 'big')
     c = bin(pow(message, e, mod=n))[2:]
-    print(f"Ciphertext (as a number): {c}")
-    print(f"Public key: {public}")
-    print(f"Private key: {private}")
+    print(f'Ciphertext (as a number): {c}')
+    print(f'Public key: {public}')
+    print(f'Private key: {private}')
 else:
     try:
         n, e_or_d = (
             int(num)
             for num in input(
-                "Enter n and e:" if encrypt_true == "e" else "Enter n and d:"
-            ).split(",")
+                'Enter n and e:' if encrypt_true == 'e' else 'Enter n and d:'
+            ).split(',')
         )
     except ValueError:
-        print("Invalid input. Ensure the input is two integers seperated by commas.")
+        print('Invalid input. Ensure the input is two integers seperated by commas.')
         exit(1)
-    d = pow(int(message, 2), e_or_d, mod=n) if encrypt_true == "d" else 0
+    d = pow(int(message, 2), e_or_d, mod=n) if encrypt_true == 'd' else 0
     c = (
-        bin(pow(int.from_bytes(message.encode(), "big"), e_or_d, mod=n))
-        if encrypt_true == "e"
-        else d.to_bytes((d.bit_length() + 7) // 8, "big").decode()
+        bin(pow(int.from_bytes(message.encode(), 'big'), e_or_d, mod=n))
+        if encrypt_true == 'e'
+        else d.to_bytes((d.bit_length() + 7) // 8, 'big').decode()
     )
-    print(f"Ciphertext (as a number): {c}")
+    print(f'Ciphertext (as a number): {c}')
