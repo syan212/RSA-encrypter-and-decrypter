@@ -58,7 +58,7 @@ else:
         n, e_or_d = (
             int(num)
             for num in input(
-                'Enter n and e:' if encrypt_true == 'e' else 'Enter n and d:'
+                'Enter n and e:' if encrypt_true == 'e' else 'Enter n and d: '
             ).split(',')
         )
     except ValueError:
