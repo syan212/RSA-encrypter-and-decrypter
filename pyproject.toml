@@ -1,0 +1,14 @@
+[project]
+name = "rsa-encrypter-and-decrypter"
+version = "0.1.0"
+description = "This a very simple RSA encrypter and decrypter I made."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "sympy>=1.14.0",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.10",
+]
