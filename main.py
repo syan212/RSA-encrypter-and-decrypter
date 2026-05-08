@@ -59,7 +59,7 @@ else:
         n, e_or_d = (
             int(num, 0)
             for num in input(
-                'Enter n and e:' if encrypt_true == 'e' else 'Enter n and d: '
+                'Enter n and e: ' if encrypt_true == 'e' else 'Enter n and d: '
             ).split(',')
         )
     except ValueError:
@@ -69,6 +69,6 @@ else:
         message = int.from_bytes(message.encode(), 'big')
         print(f'Ciphertext (hexadecimal): {hex(pow(message, e_or_d, n))}\n')
     else:
-        message = int(message, 0)
-        plain = pow(message, e_or_d, n)
+        ciphertext = int(message, 0)
+        plain = pow(ciphertext, e_or_d, n)
         print(f'Plaintext (hexadecimal): {plain.to_bytes((plain.bit_length() + 7) // 8, 'big').decode()}\n')
