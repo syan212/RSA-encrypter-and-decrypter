@@ -13,8 +13,8 @@ def generate_prime(bits: int) -> int:
 
 def generate_keys() -> tuple[tuple[int, int], tuple[int, int]]:
     """Generates RSA key in form [n, e] (public key), [n, d](private key)"""
-    p = generate_prime(1024)
-    q = generate_prime(1024)
+    p = generate_prime(random.choice([1023, 1024]))
+    q = generate_prime(random.choice([1023, 1024]))
     while abs(p - q) < 6e156:
         q = generate_prime(1024)
     n = p * q
@@ -47,16 +47,17 @@ message = input(
 
 if key_true == 'y':
     public, private = generate_keys()
-    n, e = public[0], public[1]
+    n, e, d = public[0], public[1], private[1]
     message = int.from_bytes(message.encode(), 'big')
-    c = bin(pow(message, e, mod=n))[2:]
-    print(f'Ciphertext (as a number): {c}')
-    print(f'Public key: {public}')
-    print(f'Private key: {private}')
+    c = hex(pow(message, e, mod=n))
+    print(f'Ciphertext (hexadecimal): {c}\n')
+    print(f'n (hexadecimal): {hex(n)}\n')
+    print(f'e (hexadecimal): {hex(e)}\n')
+    print(f'd (hexadecimal): {hex(d)}\n')
 else:
     try:
         n, e_or_d = (
-            int(num)
+            int(num, 0)
             for num in input(
                 'Enter n and e:' if encrypt_true == 'e' else 'Enter n and d: '
             ).split(',')
@@ -64,10 +65,10 @@ else:
     except ValueError:
         print('Invalid input. Ensure the input is two integers seperated by commas.')
         exit(1)
-    d = pow(int(message, 2), e_or_d, mod=n) if encrypt_true == 'd' else 0
-    c = (
-        bin(pow(int.from_bytes(message.encode(), 'big'), e_or_d, mod=n))
-        if encrypt_true == 'e'
-        else d.to_bytes((d.bit_length() + 7) // 8, 'big').decode()
-    )
-    print(f'Ciphertext (as a number): {c}')
+    if encrypt_true == 'e':
+        message = int.from_bytes(message.encode(), 'big')
+        print(f'Ciphertext (hexadecimal): {hex(pow(message, e_or_d, n))}\n')
+    else:
+        message = int(message, 0)
+        plain = pow(message, e_or_d, n)
+        print(f'Plaintext (hexadecimal): {plain.to_bytes((plain.bit_length() + 7) // 8, 'big').decode()}\n')
